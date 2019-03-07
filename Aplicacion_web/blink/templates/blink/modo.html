@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block 'body' %}
+
+<body style="background-color:#FBF8EF">
+
+    <br><br><br>
+    <div class="text-center">
+            <div class="well text-center">
+                <i><h4  style="color:#0B3861">Led Control </h4></i>
+                <br>
+                <br>
+                <div >
+
+                    <br>
+                    <input id="set" type="checkbox" checked data-toggle="toggle" data-on="LED ON" data-off="LED OFF" data-onstyle="success" />
+                </div>
+            </div>
+        </div>
+    <br><br><br>
+
+<center><i><h1 style="color:#0B3861">Características</h1></i></center>
+<br><br>
+
+
+<table class ="table table-hover table-bordered" id="myTable">
+    <th class ="text-center" ><i> Nombre</i></th>
+    <th class ="text-center"><i> Estado Led</i></th>
+    <th class = "text-center"><i> Fecha</i></th>
+    <th class = "text-center"><i> Url </i></th>
+
+    {% for device in arduino_history%}
+        <tr >
+            <td>{{device.nombre}}</td>
+            <td>{% if device.estado %}ON{% else %}OFF{% endif %}</td>
+            <td>{{ device.time | timesince}} ago ({{ device.time }})</td>
+            <td>{{device.url}}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+</body>
+<script>
+        $(function(){
+
+            actual_set = '{{ arduino_control.estado }}';
+
+
+            if(actual_set == 'True'){
+
+                $('#set').bootstrapToggle('on');
+            }
+            else{
+                $('#set').bootstrapToggle('off');
+            }
+
+
+            // Cuando el estado cambia.
+            $('#set').change(function() {         // Esta funcion  detecta el cambio de valor del elemento seleccionado, en este caso 'set'
+
+                $(document).ready(function() { // Utilizamos esta función para que la tabla se actualice cuando cambie el estado de la caja control del Led
+
+                    function RefreshTable() {
+                        $( "#myTable" ).load( "{% url 'modo' arduino_control.id %} #myTable" )};
+                    setTimeout(RefreshTable,10);
+                });
+
+                val = $('#set').prop('checked');  // Nos devuelve el valor de "cheked"según el estado de la caja " LED ON O LED OFF"
+
+                if (val == true){
+                    $.ajax({
+
+                        url: "{% url 'update' arduino_control.id %} +'?set=True"
+                    })
+                }
+                else{
+                    $.ajax({
+
+                        url: "{% url 'update' arduino_control.id  %} +'?set=False"
+                    })
+                }
+            });
+        });
+
+</script>
+
+{% endblock %}

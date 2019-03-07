@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block 'body' %}
+<body style="background-color:#FBF8EF;">
+
+<center><i><h1 style="color:#0B3861">Selecciona el arduino que vas a controlar: </h1></i></center>
+    <br><br><br>
+
+    {% for arduino in arduino %}
+
+    <form action=" {% url 'modo' arduino.id %}">
+        <center><i><input type="submit" style="  color:#0B4C5F; font-size : 18px; width: 10%; height: 40px; "  value= "{{ arduino.nombre }}" /></i></center><br><br>
+    </form>
+
+
+    {% endfor %}
+</body>
+
+{% endblock %}

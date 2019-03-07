@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block 'body' %}
+
+
+<body style="background-color:#FBF8EF;">
+
+<center><i><h1 style="color:#0B3861">Estados actuales</h1></i></center>
+
+<br>
+<br>
+<br>
+
+
+<table class="table  table-bordered"  id="myTable">
+
+    <th class ="text-center"><i> ID </i></th>
+    <th class ="text-center"><i> Nombre</i></th>
+    <th class ="text-center"><i> Estado Led</i></th>
+    <th class = "text-center"><i>Fecha </i></th>
+    <th class = "text-center"><i>Url</i></th>
+
+
+{% for arduino in arduino_history%}
+    <tr >
+        <td>{{arduino.id}} </td>
+        <td>{{arduino.nombre}}</td>
+        <td>{% if arduino.estado %}ON{% else %}OFF{% endif %}</td>
+        <td>{{ arduino.time | timesince}} ago ({{ arduino.time }})</td>
+        <td>{{arduino.url}} </td>
+    </tr>
+{% endfor %}
+
+</table>
+
+</body>
+{% endblock %}
